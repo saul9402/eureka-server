@@ -1,5 +1,12 @@
 spring:
   application:
     name: servicio-eureka-server
+#Este es el puerto por defecto para configurar eureka server
 server:
   port: 8761
+#Esta configuración se pone cuando se desea que el servidor de eureka sea eso, solo servidor, 
+#ya que, por defecto también se configura como cliente
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
