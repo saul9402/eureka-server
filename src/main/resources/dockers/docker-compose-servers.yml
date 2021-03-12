@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  config-server:
+    image: config-server:v1
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      - spring-cloud-ms
+  eureka-server:
+    image: eureka-server:v2
+    ports:
+      - "8761:8761"
+    restart: always
+    networks: 
+      - spring-cloud-ms
+  mysql-server8:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - spring-cloud-ms
+    environment:
+      MYSQL_DATABASE: db_springboot_cloud
+      MYSQL_ROOT_PASSWORD: password
+  rabbitmq-38:
+    image: rabbitmq:3.8-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    networks:
+      - spring-cloud-ms
+networks: 
+  spring-cloud-ms:
+
+#Este docker-compose es el primero que se debe levantar, ya que aqui es donde la mayoria de cosas se van a configurar y crear
+#Este docker-compose se debe ejecutar el comando: docker-compose -f docker-compose-servers.yml up -d
+#http://localhost:8761/ - eureka
+#http://localhost:15672/ - rabbit -> user=guest;pwd=password
+#http://localhost:9411/zipkin/ - Zipkin

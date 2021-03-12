@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  zipkin-server:
+    image: zipkin-server:v1
+    ports:
+      - "9411:9411"
+    restart: always
+    networks:
+      - spring-cloud-ms
+    environment:
+      RABBIT_ADDRESSES: rabbitmq-38:5672
+      STORAGE_TYPE: mysql
+      MYSQL_JDBC_URL: jdbc:mysql://mysql-server8:3306/zipkin?useSSL=false&user=zipkin&password=zipkin&allowPublicKeyRetrieval=true
+networks: 
+  spring-cloud-ms:
+
+
+#Para ejecutar este docker-compose es necesario haber levantado el doker-compose-servers, ya que este se conecta a la BD que ahi se configura, asi como al rabbitmq
+#También es importante crear el esquema de BD llamado "zipkin" con usuario y password = "zipkin" y haber ejecutado el DDL para crear las tablas
+#dicho DDL es posible encontrarlo en https://github.com/openzipkin/zipkin/blob/master/zipkin-storage/mysql-v1/src/main/resources/mysql.sql
+#una vez hecho esto se debe ejecutar el comando: docker-compose -f docker-compose-zipkin-server.yml up -d
+#y para bajar: docker-compose -f docker-compose-zipkin-server.yml down -v

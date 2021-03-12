@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  ms-productos:
+    image: mservicio-productos:v2
+    restart: always
+    networks:
+      - spring-cloud-ms
+  ms-usuarios:
+    image: mservicio-usuarios:v2
+    restart: always
+    networks:
+      - spring-cloud-ms
+  ms-oauth-2:
+    image: mservicio-oauth-server:v2
+    restart: always
+    networks: 
+      - spring-cloud-ms
+  ms-items:
+    image: mservicio-items:v1
+    restart: always
+    networks:
+      - spring-cloud-ms
+  zuul-server:
+    image: zuul-server:v1
+    ports: 
+    - "8090:8090"
+    restart: always
+    networks: 
+      - spring-cloud-ms
+    depends_on:
+      - ms-items
+      - ms-oauth-2
+      - ms-usuarios
+      - ms-productos
+networks: 
+  spring-cloud-ms:
+
+
+#Este docker-compose debe ser el ultimo en levantar, ya que estos servicios se van a conectar a eureka, la bd y a zipkin, 
+#por lo que ya deben estar arriba cuando estos se quieran levantar.
+#el comando es:  docker-compose -f docker-compose-microservicios.yml up -d
